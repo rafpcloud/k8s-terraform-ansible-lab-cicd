@@ -1,0 +1,17 @@
+resource "aws_ebs_volume" "pv1" {
+  availability_zone = "us-east-1a"
+  size              = "40"
+  type              = "gp3"
+  iops              = "4000"
+  throughput        = "1000"
+  encrypted         = "true"
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+resource "aws_volume_attachment" "mountsdb" {
+  device_name = "/dev/sdb"
+  instance_id = aws_instance.app_server.id
+  volume_id   = aws_ebs_volume.pv1.id
+}
