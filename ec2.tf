@@ -1,5 +1,5 @@
 data "aws_ami" "amazonlinux_ami" {
-  owners = ["amazon"]
+  owners      = ["amazon"]
   most_recent = true
 
   filter {
@@ -12,20 +12,20 @@ data "aws_ami" "amazonlinux_ami" {
 
 resource "aws_instance" "public" {
   for_each      = aws_subnet.public
-  ami           = data.aws_ami.amazonlinux_ami.id 
+  ami           = data.aws_ami.amazonlinux_ami.id
   instance_type = "t2.medium"
   key_name      = aws_key_pair.ssh-key.key_name
   subnet_id     = each.value.id
-  
-tags = {
-  
-Name = each.key == [3] ? "MASTER${each.key}" : "NODE${each.key}" 
- 
+
+  tags = {
+
+    Name = each.key == [3] ? "MASTER${each.key}" : "NODE${each.key}"
+
   }
 
-#tags = {
-#      Name = Server "${each.key}"
-#  }
+  #tags = {
+  #      Name = Server "${each.key}"
+  #  }
 
 
 }

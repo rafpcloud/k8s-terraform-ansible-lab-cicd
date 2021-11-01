@@ -10,7 +10,7 @@ locals {
 
 resource "aws_vpc" "main" {
 
-cidr_block = var.vpc_cidr 
+  cidr_block = var.vpc_cidr
 
 }
 
@@ -21,7 +21,7 @@ resource "aws_subnet" "public" {
   cidr_block              = cidrsubnet(var.vpc_cidr, 4, each.key + 1)
   availability_zone       = local.az_names[each.key]
   map_public_ip_on_launch = true
-  
+
 }
 
 resource "aws_internet_gateway" "gw" {

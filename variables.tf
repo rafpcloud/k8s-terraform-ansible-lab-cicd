@@ -1,7 +1,7 @@
 
-variable  "vpc_cidr" {
+variable "vpc_cidr" {
 
-default = "192.168.0.0/16"
+  default = "192.168.0.0/16"
 
 }
 
@@ -21,23 +21,23 @@ default = "192.168.0.0/16"
 
 
 variable "availability_zone" {
-    type = map
-    default = {
+  type = map(any)
+  default = {
     "us-east-1" = "us-east-1a"
     "us-east-2" = "us-east-2b"
-    "us-east-2" = "us-east-2c"   
-     }
-  
+    "us-east-2" = "us-east-2c"
+  }
+
 }
 
 variable "aws_region" {
 
-  default = "us-east-1"  
+  default = "us-east-1"
 
 }
 
 variable "instance_count" {
-default = "6" 
+  default = "6"
 }
 
 

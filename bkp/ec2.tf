@@ -1,21 +1,21 @@
 resource "aws_instance" "master" {
-  
+
   instance_type        = "t3.medium"
   ami                  = "ami-0dc2d3e4c0f9ebd18"
   count                = var.instance_count
   iam_instance_profile = aws_iam_instance_profile.k8s_profile.name
-  availability_zone    = lookup(var.availability_zone,var.aws_region)
+  availability_zone    = lookup(var.availability_zone, var.aws_region)
   key_name             = "ssh-key"
   #security_groups  =   ["sgweb"]
-     timeouts {
+  timeouts {
     create = "10m"
     delete = "20m"
   }
 
-tags = { 
-Name= element(var.instance_tags, count.index)
+  tags = {
+    Name = element(var.instance_tags, count.index)
 
-}
+  }
 }
 
 resource "aws_key_pair" "ssh-key" {

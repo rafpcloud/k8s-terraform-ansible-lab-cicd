@@ -6,7 +6,7 @@ resource "aws_route_table" "web-rt" {
     gateway_id = aws_internet_gateway.gw.id
   }
 
-   tags = {
+  tags = {
     Name = "Route Table Xablau"
   }
 }
