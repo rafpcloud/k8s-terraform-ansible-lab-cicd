@@ -37,7 +37,8 @@ variable "aws_region" {
 }
 
 variable "instance_count" {
-default = "5" 
+default = "6" 
 }
+
 
 
