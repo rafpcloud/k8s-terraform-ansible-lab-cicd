@@ -19,7 +19,7 @@ resource "aws_instance" "public" {
 
   tags = {
 
-    Name = each.key == [3] ? "MASTER${each.key}" : "NODE${each.key}"
+    Name = each.key == [0] ? "MASTER${each.key}" : "NODE${each.key}"
 
   }
 
