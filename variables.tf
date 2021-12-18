@@ -5,40 +5,12 @@ variable "vpc_cidr" {
 
 }
 
-#variable "instance_tags" {
-#  type = list(string)
-
-#  default = ["MASTER01",
-#             "MASTER02",
-#             "MASTER03",
-#             "NODE01",
-#             "NODE02",
-#             "NODE03"
-#            ]
-#}
-
-
-
-
-variable "availability_zone" {
-  type = map(any)
+variable "custom_tags" {
+  description = "Custom tags to set on the Instances in the ASG"
+  type        = map(string)
   default = {
-    "us-east-1" = "us-east-1a"
-    "us-east-2" = "us-east-2b"
-    "us-east-2" = "us-east-2c"
+    "Name" = "MASTER01"
+    "Name" = "NODE01"
+    "Name" = "NODE02"
   }
-
 }
-
-variable "aws_region" {
-
-  default = "us-east-1"
-
-}
-
-variable "instance_count" {
-  default = "6"
-}
-
-
-

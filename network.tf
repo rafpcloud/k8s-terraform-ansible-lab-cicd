@@ -1,8 +1,12 @@
 
 data "aws_availability_zones" "azs" {
   state = "available"
-}
+  filter {
+    name   = "zone-name"
+    values = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  }
 
+}
 
 locals {
   az_names = data.aws_availability_zones.azs.names
@@ -10,10 +14,15 @@ locals {
 
 resource "aws_vpc" "main" {
 
-  cidr_block = var.vpc_cidr
+  cidr_block           = var.vpc_cidr
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
+  tags = {
+    Name = "xablau"
+  }
 
 }
-
 
 resource "aws_subnet" "public" {
   for_each                = { for index, az_name in local.az_names : index => az_name }
@@ -24,7 +33,7 @@ resource "aws_subnet" "public" {
 
 }
 
-resource "aws_internet_gateway" "gw" {
+resource "aws_internet_gateway" "xablau-gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
