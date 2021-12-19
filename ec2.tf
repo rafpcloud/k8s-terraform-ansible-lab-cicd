@@ -15,18 +15,7 @@ resource "aws_instance" "public" {
   key_name        = aws_key_pair.ssh-key.key_name
   subnet_id       = each.value.id
   security_groups = [aws_security_group.sgweb.id]
-
- tags = {
-    Name = aws_instance.public.each.value
-  }
-
 }
-
-
-
-
-
-
 
 resource "aws_key_pair" "ssh-key" {
   key_name   = "ssh-key"
