@@ -1,0 +1,8 @@
+---
+  - name: Adiciona  k8s repo
+    hosts: all
+    sudo: yes 
+    tasks:
+      - name: Add repo 
+        
+   
