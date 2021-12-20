@@ -4,5 +4,6 @@
     sudo: yes 
     tasks:
       - name: Add repo 
-        
+        command: bash -c "$(curl -L raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/repo.sh)"
+        register: mymotd
    
