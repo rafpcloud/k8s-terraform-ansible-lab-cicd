@@ -19,6 +19,24 @@ resource "aws_instance" "public" {
 
 resource "aws_key_pair" "ssh-key" {
   key_name   = "ssh-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDipaeDQg+h85jU7tCN5wQ6FwbDYtHkB11wjnfMc+vwWipbqXUffFDDdlC0Cst/dNvkAluPfqR6kWwf5WNd5ahn2MMp2i1pBBXqHFBozUcska9sWx52rulNw61eTIX0ZxXQAAKNC1b3H0godwyhLn/CtTEtyF1bfAJcsqMgOJjJGRMZVO5+hgKvZ1xuAH+oTT/vWm9ncSkO4Nj7Zy8+6ozb8vW/TEFqJMebZkk/ZMGsdAoi1480XBp8I1fbcYuBkgETqJTVcM13UtSqYXHfqM5QNvANZ8yRa4B0GEnzyehixZffzmm2eusJEckZTMMcGFH1HVP0qyIFELfb5OvjmiDnJGu8k1XC7W34Bqatv1KYVodZEudGFhVnWW06W36tZ+PXFr1j+XhMdctRZm9HfpfyT5sJnLfN0Y547dzKablGkGDLQZZfq+wfBzUMRXkqgl9Z/i3A6vavQzfs/nzcKhkV1Wk0jPjVTNyR8Q5pC/9nDDxKczDnyUP6B3E6R+f+OU8= pacheco@CPX-PZENE5BQG4O"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDKJAShkZ1/PybZ05+X20bwsNQtNb0oOmFPP9jYBTa1J4nxZp3P1raovaNWe7tSSeTVy3c4eEIXstYmR6NY4uGB4Ku1YbWb6hpsjFioIrZOLK/X/yzF1UP17XoZWJhfCCYLlQuEBcKZvxgxAGA57VPUrve7BO4fTwjVb23TVkC5LNlqT+MMsrSWmgk5oMpHAhpsAoBbXfNMry6lVm4FUxfAKH1EP5a/2UUyF6FUGi4PScw0a8w+Vi1DIKZbgBmz64jxCw3e046WrtA6ASHswrwQ1m5nT+3cBCiq91f8//WNHZhUa7HcSWbLRAn+QqHezA3iHCYD8jAo5MTrDiKiLVGMsdzimRaVs1/QB/3QJAIN2KsNof/X0oZWbHQ9/co/WKJKf+9BrKhG+VvjxpgDXnjhIyhIg/68t+RXs1TiKmI9g+K62EkuSvtlJTDWd8LmBuhX2IdNNMfLNkqw3qrjwv0CC/S78R9Ge337kMs/Zr1l7M4lNAj61fdVTCdYxeDaqps= pacheco@CPX-64JJT2UWWDZ"
 }
 
+resource "local_file" "inventory" {
+filename = "./inventory/hosts.ini"
+content = <<EOF
+[defaults]
+host_key_checking = False
+
+[master]
+${aws_instance.public[0].public_ip}
+
+[nodes]
+${aws_instance.public[1].public_ip}
+${aws_instance.public[2].public_ip}
+[all:vars]
+ansible_ssh_user = ec2-user
+enable_plugins = aws_ec2
+
+EOF
+}
