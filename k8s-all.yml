@@ -1,9 +1,59 @@
 ---
-  - name: Adiciona  k8s repo
+  - name: UAU
     hosts: all
-    sudo: yes 
+    remote_user: ec2-user
+    become: yes
+    become_method: sudo
+    become_user: root
+    gather_facts: yes
+  
     tasks:
       - name: Add repo 
-        command: bash -c "$(curl -L raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/repo.sh)"
+        command: bash -c "$(curl -L https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/repo.sh)"
         register: mymotd
    
+      - name: Cria o usurio k8sadm
+        user: name=k8sadm append=yes state=present createhome=yes shell=/bin/bash 
+
+      - name: Configura sudooers para o k8sadm
+        lineinfile:
+          dest: /etc/sudoers
+          line: 'k8sadm ALL=(ALL) NOPASSWD: ALL'
+          validate: 'visudo -cf %s'
+
+      - name: Configurar a troca de chaves
+        authorized_key: user=k8sadm key="{{item}}"
+        with_file:
+          - ~/.ssh/id_rsa.pub
+
+      - name: Desabilita o swap
+        shell: |
+               sudo swapoff -a
+               sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+      - name: Desabilita o  Selinux
+        shell: | 
+               sudo setenforce 0
+               sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config 
+
+      - name: Adicionar parametros do iptables no sysctl
+        shell: |
+               cat <<EOF > /etc/sysctl.d/k8s.conf
+               net.bridge.bridge-nf-call-ip6tables = 1
+               net.bridge.bridge-nf-call-iptables = 1
+               EOF
+               sysctl --system
+            
+      - name: Instala os pacotes do k8s 
+        yum:
+          name: '{{ item }}'
+          state: present
+          update_cache: True
+        with_items:
+          - kubelet
+          - kubeadm
+          - kubectl
+
+
+
+
