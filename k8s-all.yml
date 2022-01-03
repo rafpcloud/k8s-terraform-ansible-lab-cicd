@@ -9,7 +9,7 @@
   
     tasks:
       - name: Add repo 
-        command: bash -c "$(curl -L https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/repo.sh)"
+        command: wget -O /etc/yum.repos.d/kubernetes.repo
         register: mymotd
    
       - name: Cria o usurio k8sadm
