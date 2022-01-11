@@ -21,8 +21,10 @@
       hostname:
         name: master
 
+        
+
     - name: initialize the cluster
-      shell: kubeadm init 
+      shell: kubeadm init --pod-network-cidr=10.244.0.0/16  
       args:
         chdir: $HOME
         creates: cluster_initialized.txt
