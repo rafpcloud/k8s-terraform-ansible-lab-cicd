@@ -1,6 +1,6 @@
 ---
   - name: UAU
-    hosts: all
+    hosts: tag_Infra_K8S
     remote_user: ec2-user
     become: yes
     become_method: sudo
@@ -8,10 +8,22 @@
     gather_facts: yes
   
     tasks:
-      - name: Add repo 
-        command: wget -O /etc/yum.repos.d/kubernetes.repo  https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/kubernetes.repo
-        register: mymotd
-   
+            
+      - name: Adiciona repositorio do k8s
+        yum_repository:
+          name: k8s
+          description: k8s repo 
+          file: k8s
+          baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+          gpgcheck: no
+          enabled: yes  
+
+      - name: Instala os pacotes do k8s 
+        yum:
+          name: ['kubelet', 'kubeadm', 'kubectl', 'docker', 'tc', 'libselinux-python' ]
+          state: present
+          update_cache: True    
+  
       - name: Cria o usurio k8sadm
         user: name=k8sadm append=yes state=present createhome=yes shell=/bin/bash 
 
@@ -26,40 +38,41 @@
         with_file:
           - ~/.ssh/id_rsa.pub
 
-      - name: Desabilita o swap
-        shell: |
-               sudo swapoff -a
-               sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+      - name: Remove swapfile do arquivo /etc/fstab
+        mount:
+          name: "{{ item }}"
+          fstype: swap
+          state: absent
+        with_items:
+          - swap         
 
-      - name: Desabilita o  Selinux
-        shell: | 
-               sudo setenforce 0
-               sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config 
+      - name: Desabilita o SELinux
+        selinux:
+          state: disabled         
 
-      - name: Adicionar parametros do iptables no sysctl
-        shell: |
-               cat <<EOF > /etc/sysctl.d/k8s.conf
-               net.bridge.bridge-nf-call-ip6tables = 1
-               net.bridge.bridge-nf-call-iptables = 1
-               EOF
+      - name: Carrega o  br_netfilter module
+        shell:  echo "br_netfilter" > /etc/modules-load.d/br_netfilter.conf 
+ 
+      - name:  bridge 
+        sysctl:
+          name: "{{ item }}"
+          value: '1'
+          state: present
+        with_items:
+        - net.bridge.bridge-nf-call-ip6tables
+        - net.bridge.bridge-nf-call-iptables         
       
-      - name: Reload
+      - name: Reload do  sysctl
         shell:  sysctl --system       
             
-      - name: Instala os pacotes do k8s 
-        yum:
-          name: '{{ item }}'
-          state: present
-          update_cache: True
+      - name: Habilita os servicos 
+        systemd:
+          name: "{{ item }}"
+          state: started
+          enabled: yes 
         with_items:
           - kubelet
-          - kubeadm
-          - kubectl
-          - docker 
-          - tc
-
-      - name: Habilita e Inicia os servicos    
-        shell:  systemctl enable kubelet ;  systemctl start kubelet ;  systemctl enable docker ;  systemctl start docker
+          - docker       
 
 
 
