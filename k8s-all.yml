@@ -9,7 +9,7 @@
   
     tasks:
       - name: Add repo 
-        command: wget -O /etc/yum.repos.d/kubernetes.repo
+        command: wget -O /etc/yum.repos.d/kubernetes.repo  https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/kubernetes.repo
         register: mymotd
    
       - name: Cria o usurio k8sadm
@@ -42,7 +42,9 @@
                net.bridge.bridge-nf-call-ip6tables = 1
                net.bridge.bridge-nf-call-iptables = 1
                EOF
-               sysctl --system
+      
+      - name: Reload
+        shell:  sysctl --system       
             
       - name: Instala os pacotes do k8s 
         yum:
@@ -53,6 +55,11 @@
           - kubelet
           - kubeadm
           - kubectl
+          - docker 
+          - tc
+
+      - name: Habilita e Inicia os servicos    
+        shell:  systemctl enable kubelet ;  systemctl start kubelet ;  systemctl enable docker ;  systemctl start docker
 
 
 
