@@ -1,11 +1,4 @@
----
--  hosts: tag_Infra_K8S
-   remote_user: ec2-user
-   become: yes
-   become_user: root
-   gather_facts: yes
-  
-   tasks:
+
             
      - name: Adiciona repositorio do k8s
        yum_repository:
@@ -38,13 +31,13 @@
 
      - name: Remove swapfile do arquivo /etc/fstab
        mount:
-         name: "{{ item }}"
+         name: ['swap']
          fstype: swap
          state: absent
-         with_items:
-           - swap  
+         #with_items:
+         #  - swap  
 
-     - name: Remove swapfile do arquivo /etc/fstab 
+     - name:  Desabilita o swap 
        shell: swapoff -a           
 
      - name: Desabilita o SELinux
@@ -63,8 +56,20 @@
          - net.bridge.bridge-nf-call-ip6tables
          - net.bridge.bridge-nf-call-iptables         
         
-     - name:  Cgroup driver
-       shell: sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+     #- name:  Cgroup driver
+     #  shell: sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+     #- name: "Cgroup Driver"
+      # become: yes
+      # become_user: root
+      # lineinfile:
+      #   path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+          # The String to Search
+      #   regexp: "cgroup-driver=systemd" 
+          # The String to Replace
+      #   line: "cgroup-driver=cgroupfs"
+       #  state: present
+      #   backup: yes  
       
      - name: Reload do  sysctl
        shell:  sysctl --system       
