@@ -14,15 +14,14 @@
          name: ['kubelet', 'kubeadm', 'kubectl', 'docker', 'tc', 'libselinux-python' ]
          state: present
          update_cache: True    
-
        
      - name: Download daemon.json
        get_url:
-         url: https://github.com/rafpcloud/k8s-the-hard-way/blob/main/daemon.json
+         url: https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/daemon.json
          dest:  /etc/docker/daemon.json   
          mode: '0440'
-
          
+       
   
      - name: Cria o usurio k8sadm
        user: name=k8sadm append=yes state=present createhome=yes shell=/bin/bash 
@@ -44,7 +43,6 @@
          fstype: swap
          state: absent
          
-
      - name:  Desabilita o swap 
        shell: swapoff -a           
 
@@ -63,7 +61,7 @@
        with_items:
          - net.bridge.bridge-nf-call-ip6tables
          - net.bridge.bridge-nf-call-iptables         
-        
+     
      
      - name: Reload do  sysctl
        shell:  sysctl --system       
