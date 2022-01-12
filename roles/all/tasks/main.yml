@@ -14,6 +14,16 @@
          name: ['kubelet', 'kubeadm', 'kubectl', 'docker', 'tc', 'libselinux-python' ]
          state: present
          update_cache: True    
+
+     - name: 
+     
+     - name: Download foo.conf
+       get_url:
+         url:  https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/daemon.json    
+         dest:  /etc/docker/daemon.json   
+         mode: '0440'
+
+         
   
      - name: Cria o usurio k8sadm
        user: name=k8sadm append=yes state=present createhome=yes shell=/bin/bash 
@@ -56,21 +66,7 @@
          - net.bridge.bridge-nf-call-ip6tables
          - net.bridge.bridge-nf-call-iptables         
         
-     #- name:  Cgroup driver
-     #  shell: sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-
-     #- name: "Cgroup Driver"
-      # become: yes
-      # become_user: root
-      # lineinfile:
-      #   path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-          # The String to Search
-      #   regexp: "cgroup-driver=systemd" 
-          # The String to Replace
-      #   line: "cgroup-driver=cgroupfs"
-       #  state: present
-      #   backup: yes  
-      
+     
      - name: Reload do  sysctl
        shell:  sysctl --system       
 
