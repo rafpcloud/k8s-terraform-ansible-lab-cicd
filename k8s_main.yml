@@ -1,11 +1,17 @@
+
+
 - name: Install k8s and docker packages
   become: yes
-  hosts: tag_name_k8s
+  remote_user: ec2-user
+  become: yes
+  hosts: tag_Infra_K8S
   roles:
-    - k8s-all
+    - all
 
 - name: Setup master node
   become: yes
-  hosts: tag_type_master
+  remote_user: ec2-user
+  become: yes
+  hosts: tag_Type_MASTER
   roles:
-    - k8s-master
+    - master
