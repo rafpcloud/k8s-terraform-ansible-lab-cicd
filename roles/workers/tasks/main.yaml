@@ -11,6 +11,6 @@
     - hosts
 
 - name: Set Hostname Worker
-  shell: hostnamectl set-hostname worker-{{ inventory_hostname }}
+  shell: hostnamectl set-hostname {{ inventory_hostname }}
 
 
