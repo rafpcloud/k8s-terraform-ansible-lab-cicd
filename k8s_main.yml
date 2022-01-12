@@ -15,3 +15,12 @@
   hosts: tag_Type_MASTER
   roles:
     - master
+
+
+- name: Setup worker node
+  become: yes
+  remote_user: ec2-user
+  become: yes
+  hosts: tag_Type_WORKER
+  roles:
+    - workers

@@ -1,0 +1,16 @@
+---
+- name: Add IP address of all hosts to all hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ec2_private_ip_address }} {{item}}"
+    state: present
+  when: hostvars[item].ec2_private_ip_address is defined
+  with_items: "{{ groups.all }}"
+  tags:
+    - hosts
+
+- name: Set Hostname Worker
+  shell: hostnamectl set-hostname worker-{{ inventory_hostname }}
+
+

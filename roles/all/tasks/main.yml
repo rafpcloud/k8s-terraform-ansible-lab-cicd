@@ -15,11 +15,10 @@
          state: present
          update_cache: True    
 
-     - name: 
-     
-     - name: Download foo.conf
+       
+     - name: Download daemon.json
        get_url:
-         url:  https://raw.githubusercontent.com/rafpcloud/k8s-the-hard-way/main/daemon.json    
+         url: https://github.com/rafpcloud/k8s-the-hard-way/blob/main/daemon.json
          dest:  /etc/docker/daemon.json   
          mode: '0440'
 
@@ -44,8 +43,7 @@
          name: ['swap']
          fstype: swap
          state: absent
-         #with_items:
-         #  - swap  
+         
 
      - name:  Desabilita o swap 
        shell: swapoff -a           
