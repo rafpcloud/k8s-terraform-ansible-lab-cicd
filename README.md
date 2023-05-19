@@ -4,7 +4,7 @@ Terraform:
  
 Configuração de recursos de rede na AWS.
 
-Configuração de instancias EC2.
+Configuração de instâncias EC2.
 
 Ansible +  Inventário dinâmico.
 
