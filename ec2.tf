@@ -35,5 +35,5 @@ lifecycle {
 
 resource "aws_key_pair" "ssh-key" {
   key_name   = "ssh-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCjiKMnK9QroK0+eSgFH/bWZglKL/J2WDwa0EGXxsHvZHfv1IDnMUAIpPQGLdaGqRH3FwEmVACl9wLh9NjIMUW7J7eKRQYlQfmQBBQUSprlUiw0SrG/Dr4H6i8TFQOCtCcHFEa/lYBjVq5MEElCQpBYX+3MFySK+xYx7Qb60z/uE3C/sRtatLvcji86LSwbZmLoX7tUVZqBXCbv/ND1ZQzlqahCtu7osL8Oc/bSt8+a+7n6iFfLXOMZJc0MZylc1KA4u8Y6qCd9a9melqN1zpNH7chUtX8FWImLCmuOE2pn0cbpkxi4Bx1ST5biAeOZlFdzycxYxui/X91HLTbl00BROLYCzN5S1puvu/eC+aiLcyHK7fdB3g4Fm+Qh76Qrtc3MDhx4xMqPztcvcnaUoQ5T0EBltKVzPK/mOwDiJuHvNtv3Vdfquy8bYMckA05MdSACjQP41UECsz2Gnpmy4xS/zUCqxVk2OGnLCYInqQMqR4rFk4qefJQrRqK9+w2MRis= pacheco@sharingan"
+  public_key = ""
 }
