@@ -1,8 +1,11 @@
 # Lab de IAC e Automatização de processos.
 
-Terraform: 
+Terraform:
+ 
 Configuração de recursos de rede na AWS.
-Configuração de instancias EC2. 
+
+Configuração de instancias EC2.
+
 Ansible +  Inventário dinâmico.
 
 Instalação e configuração automatizada de cluster k8s, sendo:
